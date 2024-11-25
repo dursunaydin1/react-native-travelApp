@@ -10,12 +10,23 @@ import Color from "../contants/Color";
 import destinationCategories from "../data/categories";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const CategoryButtons = () => {
+type Props = {
+  onCatagoryChanged: (category: string) => void;
+};
+const CategoryButtons = ({ onCatagoryChanged }: Props) => {
   const itemRef = useRef<TouchableOpacity[]>([]);
+  const scrollRef = useRef<ScrollView>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleSelectCategory = (index: number) => {
+    const selected = itemRef.current[index];
     setActiveIndex(index);
+    if (!selected) return;
+    selected?.measure((fx) => {
+      scrollRef.current?.scrollTo({ x: fx, y: 0, animated: true });
+    });
+
+    onCatagoryChanged(destinationCategories[index].title);
   };
   return (
     <View>
@@ -35,7 +46,7 @@ const CategoryButtons = () => {
             ref={(el) => (itemRef.current[index] = el)}
             onPress={() => handleSelectCategory(index)}
             style={
-              activeIndex === index
+              activeIndex == index
                 ? styles.categoryBtnActive
                 : styles.categoryBtn
             }
@@ -43,9 +54,17 @@ const CategoryButtons = () => {
             <MaterialCommunityIcons
               name={item.iconName as any}
               size={20}
-              color={Color.black}
+              color={activeIndex == index ? Color.white : Color.black}
             />
-            <Text style={styles.categoryBtnTxt}>{item.title}</Text>
+            <Text
+              style={
+                activeIndex == index
+                  ? styles.categoryBtnTxtActive
+                  : styles.categoryBtnTxt
+              }
+            >
+              {item.title}
+            </Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -78,7 +97,6 @@ const styles = StyleSheet.create({
   categoryBtnActive: {
     flexDirection: "row",
     alignItems: "center",
-    borderColor: Color.primaryColor,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 10,
@@ -87,10 +105,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 2,
-    backgroundColor: Color.white,
+    backgroundColor: Color.primaryColor,
   },
   categoryBtnTxt: {
     marginLeft: 5,
     color: Color.black,
+  },
+  categoryBtnTxtActive: {
+    marginLeft: 5,
+    color: Color.white,
   },
 });
