@@ -1,6 +1,7 @@
 import {
   Dimensions,
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,6 +13,13 @@ import { ListingType } from "@/types/listingType";
 import listingData from "@/data/destinations.json";
 import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
+import Animated, {
+  interpolate,
+  SlideInDown,
+  useAnimatedRef,
+  useAnimatedStyle,
+  useScrollViewOffset,
+} from "react-native-reanimated";
 
 const { width } = Dimensions.get("window");
 const IMG_HEIGHT = 300;
@@ -22,6 +30,29 @@ const ListingDetails = () => {
     (item) => item.id === id
   );
   const router = useRouter();
+  const scrollRef = useAnimatedRef<Animated.ScrollView>();
+  const scrollOffset = useScrollViewOffset(scrollRef);
+  const imageAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: interpolate(
+            scrollOffset.value,
+            [-IMG_HEIGHT, 0, IMG_HEIGHT],
+            [-IMG_HEIGHT / 2, 0, IMG_HEIGHT * 0.75]
+          ),
+        },
+        {
+          scale: interpolate(
+            scrollOffset.value,
+            [-IMG_HEIGHT, 0, IMG_HEIGHT],
+            [2, 1, 1]
+          ),
+        },
+      ],
+    };
+  });
+
   return (
     <>
       <Stack.Screen
@@ -51,59 +82,65 @@ const ListingDetails = () => {
         }}
       />
       <View style={styles.container}>
-        <Image source={{ uri: listing.image }} style={styles.image} />
-        <View style={styles.contentWrapper}>
-          <Text style={styles.listingName}>{listing.name}</Text>
-          <View style={styles.listingLocationWrapper}>
-            <FontAwesome5
-              name="map-marker-alt"
-              size={18}
-              color={Colors.primaryColor}
-            />
-            <Text style={styles.listingLocationTxt}>{listing.location}</Text>
-          </View>
+        <Animated.ScrollView
+          ref={scrollRef}
+          contentContainerStyle={{ paddingBottom: 150 }}
+        >
+          <Animated.Image
+            source={{ uri: listing.image }}
+            style={[styles.image, imageAnimatedStyle]}
+          />
+          <View style={styles.contentWrapper}>
+            <Text style={styles.listingName}>{listing.name}</Text>
+            <View style={styles.listingLocationWrapper}>
+              <FontAwesome5
+                name="map-marker-alt"
+                size={18}
+                color={Colors.primaryColor}
+              />
+              <Text style={styles.listingLocationTxt}>{listing.location}</Text>
+            </View>
 
-          <View style={styles.highlightWrapper}>
-            <View style={{ flexDirection: "row" }}>
-              <View style={styles.highlightIcon}>
-                <Ionicons name="time" size={18} color={Colors.primaryColor} />
+            <View style={styles.highlightWrapper}>
+              <View style={{ flexDirection: "row" }}>
+                <View style={styles.highlightIcon}>
+                  <Ionicons name="time" size={18} color={Colors.primaryColor} />
+                </View>
+                <View>
+                  <Text style={styles.highlightTxt}>Duration</Text>
+                  <Text style={styles.highlightTxtVal}>
+                    {listing.duration} Days
+                  </Text>
+                </View>
               </View>
-              <View>
-                <Text style={styles.highlightTxt}>Duration</Text>
-                <Text style={styles.highlightTxtVal}>
-                  {listing.duration} Days
-                </Text>
+              <View style={{ flexDirection: "row" }}>
+                <View style={styles.highlightIcon}>
+                  <FontAwesome5
+                    name="users"
+                    size={18}
+                    color={Colors.primaryColor}
+                  />
+                </View>
+                <View>
+                  <Text style={styles.highlightTxt}>Person</Text>
+                  <Text style={styles.highlightTxtVal}>{listing.duration}</Text>
+                </View>
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <View style={styles.highlightIcon}>
+                  <Ionicons name="star" size={18} color={Colors.primaryColor} />
+                </View>
+                <View>
+                  <Text style={styles.highlightTxt}>Rating</Text>
+                  <Text style={styles.highlightTxtVal}>{listing.rating}</Text>
+                </View>
               </View>
             </View>
-            <View style={{ flexDirection: "row" }}>
-              <View style={styles.highlightIcon}>
-                <FontAwesome5
-                  name="users"
-                  size={18}
-                  color={Colors.primaryColor}
-                />
-              </View>
-              <View>
-                <Text style={styles.highlightTxt}>Person</Text>
-                <Text style={styles.highlightTxtVal}>{listing.duration}</Text>
-              </View>
-            </View>
-            <View style={{ flexDirection: "row" }}>
-              <View style={styles.highlightIcon}>
-                <Ionicons name="star" size={18} color={Colors.primaryColor} />
-              </View>
-              <View>
-                <Text style={styles.highlightTxt}>Rating</Text>
-                <Text style={styles.highlightTxtVal}>
-                  {listing.rating} Days
-                </Text>
-              </View>
-            </View>
+            <Text style={styles.listingDetails}>{listing.description}</Text>
           </View>
-          <Text style={styles.listingDetails}>{listing.description}</Text>
-        </View>
+        </Animated.ScrollView>
       </View>
-      <View style={styles.footer}>
+      <Animated.View style={styles.footer} entering={SlideInDown.delay(200)}>
         <TouchableOpacity
           onPress={() => {}}
           style={[styles.footerBtn, styles.footerBookBtn]}
@@ -113,7 +150,7 @@ const ListingDetails = () => {
         <TouchableOpacity onPress={() => {}} style={styles.footerBtn}>
           <Text style={styles.footerBtnTxt}>${listing.price}</Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     </>
   );
 };
@@ -138,7 +175,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   container: { flex: 1, backgroundColor: Colors.white },
-  contentWrapper: { padding: 20 },
+  contentWrapper: { padding: 20, backgroundColor: Colors.white },
   listingName: {
     fontSize: 24,
     fontWeight: "500",
