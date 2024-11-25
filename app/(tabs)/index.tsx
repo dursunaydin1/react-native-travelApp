@@ -1,5 +1,6 @@
 import {
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -8,12 +9,14 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Stack } from "expo-router";
-import Colors from "../../constants/Colors";
+import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useHeaderHeight } from "@react-navigation/elements";
-import CategoryButtons from "../../components/CategoryButtons";
-import Listings from "../../components/Listings";
-import listingsData from "../../data/destinations.json";
+import CategoryButtons from "@/components/CategoryButtons";
+import Listings from "@/components/Listings";
+import listingsData from "@/data/destinations.json";
+import GroupListings from "@/components/GroupListings";
+import groupData from "@/data/groups.json";
 
 const index = () => {
   const headerHeight = useHeaderHeight();
@@ -60,24 +63,27 @@ const index = () => {
         }}
       />
       <View style={[styles.container, { paddingTop: headerHeight }]}>
-        <Text style={styles.headingText}>Explore The Beatiful World!</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Text style={styles.headingText}>Explore The Beatiful World!</Text>
 
-        <View style={styles.searchSectionWrapper}>
-          <View style={styles.searchBar}>
-            <Ionicons
-              name="search"
-              size={18}
-              style={{ marginRight: 5 }}
-              color={Colors.black}
-            />
-            <TextInput placeholder="Search..." />
+          <View style={styles.searchSectionWrapper}>
+            <View style={styles.searchBar}>
+              <Ionicons
+                name="search"
+                size={18}
+                style={{ marginRight: 5 }}
+                color={Colors.black}
+              />
+              <TextInput placeholder="Search..." />
+            </View>
+            <TouchableOpacity onPress={() => {}} style={styles.filterBtn}>
+              <Ionicons name="options" size={28} color={Colors.white} />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={() => {}} style={styles.filterBtn}>
-            <Ionicons name="options" size={28} color={Colors.white} />
-          </TouchableOpacity>
-        </View>
-        <CategoryButtons onCatagoryChanged={onCatChanged} />
-        <Listings listings={listingsData} category={category} />
+          <CategoryButtons onCatagoryChanged={onCatChanged} />
+          <Listings listings={listingsData} category={category} />
+          <GroupListings listings={groupData} />
+        </ScrollView>
       </View>
     </>
   );
