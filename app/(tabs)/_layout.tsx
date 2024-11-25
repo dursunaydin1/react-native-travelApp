@@ -41,10 +41,11 @@ export default function Layout() {
             <View
               style={{
                 backgroundColor: Colors.primaryColor,
-                paddingHorizontal: 16,
-                paddingVertical: 12,
                 borderRadius: 10,
                 height: 50,
+                width: 50,
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <Ionicons name="search-outline" size={24} color={Colors.white} />
