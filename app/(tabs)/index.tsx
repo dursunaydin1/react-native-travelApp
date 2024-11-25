@@ -8,10 +8,12 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Stack } from "expo-router";
-import Color from "../contants/Color";
+import Colors from "../../constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useHeaderHeight } from "@react-navigation/elements";
-import CategoryButtons from "../components/CategoryButtons";
+import CategoryButtons from "../../components/CategoryButtons";
+import Listings from "../../components/Listings";
+import listingsData from "../../data/destinations.json";
 
 const index = () => {
   const headerHeight = useHeaderHeight();
@@ -42,7 +44,7 @@ const index = () => {
               onPress={() => {}}
               style={{
                 marginRight: 20,
-                backgroundColor: Color.white,
+                backgroundColor: Colors.white,
                 padding: 10,
                 borderRadius: 10,
                 shadowColor: "#171717",
@@ -52,7 +54,7 @@ const index = () => {
                 elevation: 4,
               }}
             >
-              <Ionicons name="notifications" size={20} color={Color.black} />
+              <Ionicons name="notifications" size={20} color={Colors.black} />
             </TouchableOpacity>
           ),
         }}
@@ -66,15 +68,16 @@ const index = () => {
               name="search"
               size={18}
               style={{ marginRight: 5 }}
-              color={Color.black}
+              color={Colors.black}
             />
             <TextInput placeholder="Search..." />
           </View>
           <TouchableOpacity onPress={() => {}} style={styles.filterBtn}>
-            <Ionicons name="options" size={28} color={Color.white} />
+            <Ionicons name="options" size={28} color={Colors.white} />
           </TouchableOpacity>
         </View>
         <CategoryButtons onCatagoryChanged={onCatChanged} />
+        <Listings listings={listingsData} category={category} />
       </View>
     </>
   );
@@ -86,12 +89,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    backgroundColor: Color.bgColor,
+    backgroundColor: Colors.bgColor,
   },
   headingText: {
     fontSize: 28,
     fontWeight: "800",
-    color: Color.black,
+    color: Colors.black,
     marginTop: 10,
   },
   searchSectionWrapper: {
@@ -102,12 +105,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: Color.white,
+    backgroundColor: Colors.white,
     padding: 12,
     borderRadius: 10,
   },
   filterBtn: {
-    backgroundColor: Color.primaryColor,
+    backgroundColor: Colors.primaryColor,
     alignItems: "center",
     borderRadius: 10,
     padding: 16,

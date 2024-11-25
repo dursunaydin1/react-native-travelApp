@@ -1,20 +1,20 @@
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
-import Color from "../contants/Color";
+import Colors from "@/constants/Colors";
 
-export default function _layout() {
+export default function Layout() {
   return (
     <Tabs
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: Color.bgColor,
+          backgroundColor: Colors.bgColor,
           borderTopWidth: 0,
           padding: 0,
         },
         tabBarShowLabel: false,
-        tabBarActiveTintColor: Color.black,
+        tabBarActiveTintColor: Colors.black,
         tabBarInactiveTintColor: "#999",
       }}
     >
@@ -40,21 +40,18 @@ export default function _layout() {
           tabBarIcon: ({ color }) => (
             <View
               style={{
-                backgroundColor: Color.primaryColor,
-
+                backgroundColor: Colors.primaryColor,
+                paddingHorizontal: 16,
+                paddingVertical: 12,
                 borderRadius: 10,
                 height: 50,
-                width: 50,
-                justifyContent: "center",
-                alignItems: "center",
               }}
             >
-              <Ionicons name="search-outline" size={24} color={Color.white} />
+              <Ionicons name="search-outline" size={24} color={Colors.white} />
             </View>
           ),
         }}
       />
-
       <Tabs.Screen
         name="bookmarks"
         options={{

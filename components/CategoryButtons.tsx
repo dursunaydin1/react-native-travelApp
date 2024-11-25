@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import React, { useRef, useState } from "react";
-import Color from "../contants/Color";
+import Colors from "@/constants/Colors";
 import destinationCategories from "../data/categories";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -54,7 +54,7 @@ const CategoryButtons = ({ onCatagoryChanged }: Props) => {
             <MaterialCommunityIcons
               name={item.iconName as any}
               size={20}
-              color={activeIndex == index ? Color.white : Color.black}
+              color={activeIndex == index ? Colors.white : Colors.black}
             />
             <Text
               style={
@@ -78,12 +78,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: "700",
-    color: Color.black,
+    color: Colors.black,
   },
   categoryBtn: {
     flexDirection: "row",
     alignItems: "center",
-    borderColor: Color.white,
+    borderColor: Colors.white,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 10,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 2,
-    backgroundColor: Color.white,
+    backgroundColor: Colors.white,
   },
   categoryBtnActive: {
     flexDirection: "row",
@@ -105,14 +105,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 2,
-    backgroundColor: Color.primaryColor,
+    backgroundColor: Colors.primaryColor,
   },
   categoryBtnTxt: {
     marginLeft: 5,
-    color: Color.black,
+    color: Colors.black,
   },
   categoryBtnTxtActive: {
     marginLeft: 5,
-    color: Color.white,
+    color: Colors.white,
   },
 });
